@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "keyVaultName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Azure Key Vault"
+      }
+    },
+    "eventHubName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the target Event Hub"
+      }
+    },
+    "userAssignedIdentity": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource ID of the User-Assigned Managed Identity"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults/providers/diagnosticSettings",
+      "apiVersion": "2021-05-01-preview",
+      "name": "[concat(parameters('keyVaultName'), '/Microsoft.Insights/kv-export-to-eventhub')]",
+      "properties": {
+        "logs": [
+          {
+            "category": "AuditEvent",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": false,
+              "days": 0
+            }
+          }
+        ],
+        "eventHubName": "[parameters('eventHubName')]",
+        "eventHubAuthorizationRuleId": "/subscriptions/74163375-c8e2-41f2-a4aa-13b6c34f7243/resourceGroups/eh-rg/providers/Microsoft.EventHub/namespaces/cc-eh001/authorizationRules/dummykey",
+        "workspaceId": null,
+        "identity": {
+          "type": "UserAssigned",
+          "userAssignedIdentity": "[parameters('userAssignedIdentity')]"
+        }
+      }
+    }
+  ]
+}
