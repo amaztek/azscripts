@@ -38,7 +38,7 @@
           }
         ],
         "eventHubName": "[parameters('eventHubName')]",
-        "eventHubAuthorizationRuleId": "/subscriptions/74163375-c8e2-41f2-a4aa-13b6c34f7243/resourceGroups/eh-rg/providers/Microsoft.EventHub/namespaces/cc-eh001/authorizationRules/dummykey",
+        "eventHubAuthorizationRuleId": "/subscriptions/<subid>/eh-rg/providers/Microsoft.EventHub/namespaces/cc-eh001/authorizationRules/dummykey",
         "workspaceId": null,
         "identity": {
           "type": "UserAssigned",
