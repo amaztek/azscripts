@@ -1,0 +1,39 @@
+# === CONFIGURE THESE VARIABLES ===
+$organization = "your_org"
+$project = "your_project"
+$repositoryId = "your_repo"  # repo name or ID
+$pat = "your_PAT_here"
+
+# Commit IDs for tags (replace with actual commit hashes)
+$oldLatestCommit = "def4567890abcdef1234567890abcdef12345678"  # current latest commit
+$v1_2FinalCommit = "abc1234567890abcdef1234567890abcdef123456" # v1.2_final commit
+
+# === Prepare Authorization Header ===
+$base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$pat"))
+
+# === REST API URL ===
+$uri = "https://dev.azure.com/$organization/$project/_apis/git/repositories/$repositoryId/refs?api-version=7.0"
+
+# === JSON Payload ===
+$body = @(
+    @{
+        name = "refs/tags/previous_latest"
+        oldObjectId = "0000000000000000000000000000000000000000"
+        newObjectId = $oldLatestCommit
+    },
+    @{
+        name = "refs/tags/latest"
+        oldObjectId = $oldLatestCommit
+        newObjectId = $v1_2FinalCommit
+    }
+) | ConvertTo-Json -Depth 3
+
+# === Make the REST API Call ===
+$response = Invoke-RestMethod -Uri $uri -Method Post -Headers @{
+    Authorization = "Basic $base64AuthInfo"
+    "Content-Type" = "application/json"
+} -Body $body
+
+# === Output response ===
+Write-Output "API response:"
+$response | ConvertTo-Json -Depth 5
