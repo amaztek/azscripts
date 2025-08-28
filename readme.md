@@ -1,4 +1,6 @@
-README: Update Tags in Azure DevOps Using PowerShell REST API
+README: 
+
+Update Tags in Azure DevOps Using PowerShell REST API
 
 This guide explains how to move the latest tag to point to the same commit as the v1.2_final tag, and save the current latest tag as previous_latest using the Azure DevOps REST API with PowerShell.
 
